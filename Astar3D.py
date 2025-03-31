@@ -3,6 +3,12 @@ import numpy as np
 import heapq
 from math import sqrt
 
+from mpl_toolkits.mplot3d import Axes3D
+
+def custom_format(array):
+    formatted = "[" + "; ".join(f"[{a}, {b}, {c}]" for a, b, c in array) + "]"
+    print(formatted)
+
 def create_node(position: Tuple[int, int, int], g: float = float('inf'), 
                 h: float = 0.0, parent: Dict = None) -> Dict:
     """
@@ -28,6 +34,8 @@ def create_node(position: Tuple[int, int, int], g: float = float('inf'),
 def calculate_heuristic(pos1: Tuple[int, int, int], pos2: Tuple[int, int, int]) -> float:
     """
     Calculate the estimated distance between two points using Euclidean distance.
+    If other heuristic is used (like Manhattan distance) it's possible that the diagonal
+    moves are most likely chosen, this can be avoided by adding a tiny penalty to them. 
     """
     x1, y1, z1 = pos1
     x2, y2, z2 = pos2
@@ -51,17 +59,17 @@ def get_valid_neighbors(grid: np.ndarray, position: Tuple[int, int, int]) -> Lis
     possible_moves = [
         (x+1, y, z), (x-1, y, z),    # Right, Left
         (x, y+1, z), (x, y-1, z),    # Forward, Backward
-        # (x+1, y+1, z), (x-1, y-1, z),  # Diagonal moves x-y
-        # (x+1, y-1, z), (x-1, y+1, z)
+        (x+1, y+1, z), (x-1, y-1, z),  # Diagonal moves x-y
+        (x+1, y-1, z), (x-1, y+1, z),
         (x, y, z+1), (x, y, z-1),   # Up, Down
-        # (x+1, y, z+1), (x-1, y, z+1),   # Diagonal moves x-z
-        # (x+1, y, z-1), (x-1, y, z-1),
-        # (x, y+1, z+1), (x, y-1, z+1),   # Diagonal moves y-z
-        # (x, y+1, z-1), (x, y-1, z-1),
-        # (x+1, y+1, z+1), (x+1, y-1, z+1),   # Corner moves
-        # (x-1, y+1, z+1), (x-1, y-1, z+1),
-        # (x+1, y+1, z-1), (x+1, y-1, z-1),
-        # (x-1, y+1, z-1), (x-1, y-1, z-1),
+        (x+1, y, z+1), (x-1, y, z+1),   # Diagonal moves x-z
+        (x+1, y, z-1), (x-1, y, z-1),
+        (x, y+1, z+1), (x, y-1, z+1),   # Diagonal moves y-z
+        (x, y+1, z-1), (x, y-1, z-1),
+        (x+1, y+1, z+1), (x+1, y-1, z+1),   # Corner moves
+        (x-1, y+1, z+1), (x-1, y-1, z+1),
+        (x+1, y+1, z-1), (x+1, y-1, z-1),
+        (x-1, y+1, z-1), (x-1, y-1, z-1),
     ]   
     
     return [    # this rows/cols could be either int or real coordinates ??
@@ -152,35 +160,48 @@ def visualize_path(grid: np.ndarray, path: List[Tuple[int, int, int]]):
     """
     Visualize the grid and found path.
     """
-    plt.figure(figsize=(10, 10))
-    plt.imshow(grid, cmap='binary')
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')
+
+    # Get coordinates of obstacle cells (value == 1)
+    obstacle_y, obstacle_x, obstacle_z = np.where(grid == 1)
+    ax.scatter(obstacle_y, obstacle_x, obstacle_z, c='black', marker='s',s=50,label='Obstacles')
     
+    # Get coordinates of path
     if path:
         path = np.array(path)
-        plt.plot(path[:, 1], path[:, 0], 'b-', linewidth=3, label='Path')
-        plt.plot(path[0, 1], path[0, 0], 'go', markersize=15, label='Start')
-        plt.plot(path[-1, 1], path[-1, 0], 'ro', markersize=15, label='Goal')
+        x = path[:, 0]
+        y = path[:, 1]
+        z = path[:, 2]
+        ax.plot(x, y, z, c='r', marker='o', label='Path')
     
-    plt.grid(True)
-    plt.legend(fontsize=12)
-    plt.title("A* Pathfinding Result")
+    # plt.grid(True)
+    ax.legend(fontsize=12)
+    ax.set_title("A* Pathfinding Result")
+    ax.set_xlabel('X Label')
+    ax.set_ylabel('Y Label')
+    ax.set_zlabel('Z Label')
     plt.show()
 
 
 # Create a sample grid
 grid = np.zeros((20, 20, 20))  # 20x20 grid, all free space initially
 # Add some obstacles
-grid[5:15, 10, 0:6] = 1  # Vertical wall
-grid[5:15, 10, 10:18] = 1  # Vertical wall
+grid[5:15, 10, 5:15] = 1  # Vertical wall
+# grid[5:15, 10, 10:18] = 1  # Vertical wall
 grid[5, 5:15, 5:15] = 1   # Horizontal wall
 # Define start and goal positions
-start_pos = (2, 2, 1)
-goal_pos = (18, 18, 15)
+start_pos = (2, 7, 12)  # x and y coordinates are inverted !!
+goal_pos = (18, 18, 8)
 # Find the path
 path = find_path(grid, start_pos, goal_pos)
+
+print(path[:])
+
+
 if path:
     print(f"Path found with {len(path)} steps!")
-    print(path)
+    custom_format(path)
     visualize_path(grid, path)
 else:
     print("No path found!")
