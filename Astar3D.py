@@ -3,6 +3,7 @@ import numpy as np
 import heapq
 from math import sqrt
 
+import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 def custom_format(array):
@@ -155,12 +156,11 @@ def find_path(grid: np.ndarray, start: Tuple[int, int, int],
     
     return []  # No path found
 
-import matplotlib.pyplot as plt
 def visualize_path(grid: np.ndarray, path: List[Tuple[int, int, int]]):
     """
     Visualize the grid and found path.
     """
-    fig = plt.figure()
+    # fig = plt.figure()
     ax = plt.axes(projection='3d')
 
     # Get coordinates of obstacle cells (value == 1)
