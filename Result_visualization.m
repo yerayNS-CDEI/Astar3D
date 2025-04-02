@@ -32,11 +32,11 @@ grid(5, 6-1:15-1, 5:15-1) = 1;   % Horizontal wall
 
 % Plot obstacles using scatter3 in black
 figure();
-scatter3(cols, rows, heights, 250, 'k', 'filled','o'); hold on;
+scatter3(rows, cols, heights, 250, 'k', 'filled','o'); hold on;
 % Plot the path with red color
 % scatter3(result_path(:,2), result_path(:,1), result_path(:,3), 50, 'r', 'filled');
 % Plot the path with red color and connect the points with a line
-plot3(result_path(:,2), result_path(:,1), result_path(:,3), 'r-', 'LineWidth', 2);
+plot3(result_path(:,1), result_path(:,2), result_path(:,3), 'r-', 'LineWidth', 2);
 
 xlabel('X');
 ylabel('Y');
