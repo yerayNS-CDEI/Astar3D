@@ -160,7 +160,7 @@ def visualize_path(grid: np.ndarray, path: List[Tuple[int, int, int]]):
     """
     Visualize the grid and found path.
     """
-    # fig = plt.figure()
+    fig = plt.figure()
     ax = plt.axes(projection='3d')
 
     # Get coordinates of obstacle cells (value == 1)
@@ -201,7 +201,7 @@ print(path[:])
 
 if path:
     print(f"Path found with {len(path)} steps!")
-    custom_format(path)
+    # custom_format(path)
     visualize_path(grid, path)
 else:
     print("No path found!")
