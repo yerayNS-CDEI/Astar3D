@@ -181,27 +181,26 @@ def visualize_path(grid: np.ndarray, path: List[Tuple[int, int, int]]):
     ax.set_xlabel('X Label')
     ax.set_ylabel('Y Label')
     ax.set_zlabel('Z Label')
-    plt.show()
+    plt.show(block=False)
+
+# # Create a sample grid
+# grid = np.zeros((20, 20, 20))  # 20x20 grid, all free space initially
+# # Add some obstacles
+# grid[5:15, 10, 5:15] = 1  # Vertical wall
+# # grid[5:15, 10, 10:18] = 1  # Vertical wall
+# grid[5, 5:15, 5:15] = 1   # Horizontal wall
+# # Define start and goal positions
+# start_pos = (2, 7, 12)  # x and y coordinates are inverted !!
+# goal_pos = (18, 18, 8)
+# # Find the path
+# path = find_path(grid, start_pos, goal_pos)
+
+# print(path[:])
 
 
-# Create a sample grid
-grid = np.zeros((20, 20, 20))  # 20x20 grid, all free space initially
-# Add some obstacles
-grid[5:15, 10, 5:15] = 1  # Vertical wall
-# grid[5:15, 10, 10:18] = 1  # Vertical wall
-grid[5, 5:15, 5:15] = 1   # Horizontal wall
-# Define start and goal positions
-start_pos = (2, 7, 12)  # x and y coordinates are inverted !!
-goal_pos = (18, 18, 8)
-# Find the path
-path = find_path(grid, start_pos, goal_pos)
-
-print(path[:])
-
-
-if path:
-    print(f"Path found with {len(path)} steps!")
-    # custom_format(path)
-    visualize_path(grid, path)
-else:
-    print("No path found!")
+# if path:
+#     print(f"Path found with {len(path)} steps!")
+#     # custom_format(path)
+#     visualize_path(grid, path)
+# else:
+#     print("No path found!")
