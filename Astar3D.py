@@ -181,7 +181,9 @@ def visualize_path(grid: np.ndarray, path: List[Tuple[int, int, int]]):
     ax.set_xlabel('X Label')
     ax.set_ylabel('Y Label')
     ax.set_zlabel('Z Label')
-    plt.show(block=False)
+    # plt.show(block=False)
+
+    return fig, ax, path
 
 # # Create a sample grid
 # grid = np.zeros((20, 20, 20))  # 20x20 grid, all free space initially
