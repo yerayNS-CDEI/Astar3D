@@ -42,6 +42,18 @@ def calculate_heuristic(pos1: Tuple[int, int, int], pos2: Tuple[int, int, int]) 
     x2, y2, z2 = pos2
     return sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
 
+def calculate_heuristic_reach(reachability_map: np.ndarray, pos1: Tuple[int, int, int], pos2: Tuple[int, int, int]) -> float:
+    """
+    Calculate the estimated distance between two points using Euclidean distance.
+    If other heuristic is used (like Manhattan distance) it's possible that the diagonal
+    moves are most likely chosen, this can be avoided by adding a tiny penalty to them. 
+    """
+    x1, y1, z1 = pos1
+    x2, y2, z2 = pos2
+    reach1 = reachability_map[x1,y1,z1]
+    reach2 = reachability_map[x2,y2,z2]
+    return sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+
 def get_valid_neighbors(grid: np.ndarray, position: Tuple[int, int, int]) -> List[Tuple[int, int, int]]:
     """
     Get all valid neighboring positions in the grid.
@@ -99,8 +111,8 @@ def find_path(grid: np.ndarray, start: Tuple[int, int, int],
     
     Args:
         grid: 2D numpy array (0 = free space, 1 = obstacle)
-        start: Starting position (x, y)
-        goal: Goal position (x, y)
+        start: Starting position (x, y) in grid indices
+        goal: Goal position (x, y) in grid indices
     
     Returns:
         List of positions representing the optimal path
