@@ -52,7 +52,7 @@ def calculate_heuristic_reach(reachability_map: np.ndarray, pos1: Tuple[int, int
     x2, y2, z2 = pos2
     reach1 = reachability_map[x1,y1,z1]
     reach2 = reachability_map[x2,y2,z2]
-    return sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+    return sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2) - (reach2 - reach1)
 
 def get_valid_neighbors(grid: np.ndarray, position: Tuple[int, int, int]) -> List[Tuple[int, int, int]]:
     """
